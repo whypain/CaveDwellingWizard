@@ -13,11 +13,11 @@ public class MenuSceneManager : Singleton<MenuSceneManager>
         {
             menuParticleSystem.Play();
         }
-        else
-        {
-            menuParticleSystem.Stop();
-            menuParticleSystem.Clear();
-        }
+        // else
+        // {
+        //     menuParticleSystem.Stop();
+        //     menuParticleSystem.Clear();
+        // }
     }
 
 }
