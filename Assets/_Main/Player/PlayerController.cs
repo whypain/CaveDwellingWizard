@@ -5,8 +5,12 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Configs")]
     [SerializeField] float jumpForce;
+    [SerializeField] float falingGravity;
+    [SerializeField] float fallingThreshold;
     [SerializeField] float speed;
-    [SerializeField] float minWalkingSpd = 0.1f; 
+    [SerializeField] float minWalkingSpd = 0.1f;
+    [SerializeField] float groundCheckDist = 0.1f;
+    [SerializeField] LayerMask whatIsGround;
 
     [Header("References")]
     [SerializeField] Transform playerTransform;
@@ -14,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
 
     private bool hasMvmentInput;
+    private bool isGrounded => CheckGrounded();
+    private bool isGroundedLastFrame;
     private Vector2 mvmentInput;
 
     private void OnEnable()
@@ -28,23 +34,39 @@ public class PlayerController : MonoBehaviour
     {
         InputSystem.actions["Player/Move"].performed -= OnMove;
         InputSystem.actions["Player/Move"].canceled -= UnMove;
+
         InputSystem.actions["Player/Jump"].performed -= OnJump;
     }
 
     private void Update()
+    {
+        animator.SetBool("Walking", Mathf.Abs(rb.linearVelocityX) > minWalkingSpd);
+
+        if (!isGroundedLastFrame && isGrounded) OnLanded();
+    }
+
+    private void LateUpdate()
+    {
+        isGroundedLastFrame = isGrounded;
+    }
+
+    private void FixedUpdate()
     {
         if (hasMvmentInput)
         {
             Move();
         }
 
-        animator.SetBool("Walking", Mathf.Abs(rb.linearVelocityX) > minWalkingSpd);
+        if (rb.linearVelocityY < 0 && rb.linearVelocityY < fallingThreshold && !isGrounded)
+        {
+            rb.gravityScale = falingGravity;
+        }
     }
 
 
     private void Move()
     {
-        Vector2 velocity = mvmentInput * speed * Time.deltaTime;
+        Vector2 velocity = mvmentInput * speed * Time.fixedDeltaTime;
         rb.linearVelocityX = velocity.x;
     }
 
@@ -65,6 +87,24 @@ public class PlayerController : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext _)
     {
+        if (!isGrounded) return;
+        rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+    }
 
+    private void OnLanded()
+    {
+        rb.gravityScale = 1;
+    }
+
+    private bool CheckGrounded()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(playerTransform.position, Vector2.down, groundCheckDist, whatIsGround);
+        return hit;
+    }
+
+
+    private void OnDrawGizmosSelected()
+    {
+        Debug.DrawRay(playerTransform.position, Vector2.down * groundCheckDist, Color.beige);
     }
 }
