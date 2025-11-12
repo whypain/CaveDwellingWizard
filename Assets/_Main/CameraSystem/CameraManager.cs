@@ -15,9 +15,11 @@ public class CameraManager : MonoBehaviour
 
     private bool isOnCooldown;
 
-    void Start()
+    public void Initialize(Player player)
     {
-        player = FindFirstObjectByType<Player>();
+        this.player = player;
+        if (player == null) throw new System.Exception("Player can not be null.");
+
         mainCam = Camera.main;
 
         foreach(Transform child in transform)
