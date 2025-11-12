@@ -1,15 +1,20 @@
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class SaveLoadSystem 
+public class SaveLoadSystem
 {
+    public void ClearSave()
+    {
+        PlayerPrefs.DeleteKey(Constants.SAVED_LEVEL);
+        PlayerPrefs.DeleteKey(Constants.PLAYER_DATA);
+    }
+
     public void Save(string levelName, PlayerData playerData)
     {
         PlayerPrefs.SetString(Constants.SAVED_LEVEL, levelName);
-        PlayerPrefs.SetString(Constants.PLAYER_DATA, $"{playerData.Milk}|{playerData.Cookies}|{playerData.Position}|{playerData.Time}");
+        PlayerPrefs.SetString(Constants.PLAYER_DATA, playerData.Pack());
     }
 
 
@@ -24,6 +29,7 @@ public class SaveLoadSystem
             AsyncOperationHandle<GameObject> operation = Addressables.LoadAssetAsync<GameObject>(levelAddress);
             GameObject loaded = await operation.Task;
             level = loaded.GetComponent<Level>();
+            loaded.name = levelAddress;
 
             string raw = PlayerPrefs.GetString(Constants.PLAYER_DATA);
             playerData = PlayerData.Unpack(raw);

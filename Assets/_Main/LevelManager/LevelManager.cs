@@ -8,9 +8,11 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField] CameraManager camManager;
     [SerializeField] Player player;
 
-    public string CurrentLevelName => currentLevel.name;
+    public Level CurrentLevel => currentLevel;
+    public Player Player => currentPlayer;
 
     private SaveLoadSystem saveLoadSystem = new SaveLoadSystem();
+    private Player currentPlayer;
     private Level currentLevel;
 
     private Vector3 k_camPos => new Vector3(0, -1, 0);
@@ -23,8 +25,34 @@ public class LevelManager : Singleton<LevelManager>
         LoadLevel();
     }
 
+    [ContextMenu("Test Save Level")]
+    private void TestSaveLevel()
+    {
+        saveLoadSystem.Save(CurrentLevel.name, Player.Data);
+    }
+
+    [ContextMenu("Test Save & Exit")]
+    private void TestSaveAndExitLevel()
+    {
+        saveLoadSystem.Save(CurrentLevel.name, Player.Data);
+        OnExit();
+    }
+
+    private void OnExit()
+    {
+        Destroy(currentLevel.gameObject);
+        currentLevel = null;
+    }
+
+    [ContextMenu("Clear Save")]
+    private void ClearSave()
+    {
+        saveLoadSystem.ClearSave();
+    }
+
     public async void LoadLevel()
     {
+        if (currentLevel != null) throw new System.Exception("There is already a level loaded");
         if (player == null || camManager == null) throw new System.Exception("Player or CamManager is null");
 
         (Level level, PlayerData playerData) = await saveLoadSystem.Load();
@@ -33,13 +61,15 @@ public class LevelManager : Singleton<LevelManager>
         Player spawnedPlayer = Instantiate(player, spawnedLevel.PlayerSpawnPoint);
         CameraManager spawnedCam = Instantiate(camManager, spawnedLevel.PlayerSpawnPoint);
 
+        spawnedLevel.name = level.name;
+
         spawnedPlayer.transform.localPosition = playerData.Position;
         spawnedCam.transform.localPosition = k_camPos;
 
         spawnedPlayer.Initialize(playerData);
         spawnedCam.Initialize(spawnedPlayer);
 
-        Assert.IsTrue((Vector2)spawnedPlayer.transform.localPosition == playerData.Position);
-        Assert.IsTrue(spawnedCam.transform.localPosition == new Vector3(0, -1, 0));
+        currentLevel = spawnedLevel;
+        currentPlayer = spawnedPlayer;
     }
 }

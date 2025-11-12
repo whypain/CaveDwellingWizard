@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public PlayerData playerData;
+    public PlayerData Data => playerData;
+    private PlayerData playerData;
 
 
     public void Initialize(PlayerData playerData)
@@ -54,7 +55,7 @@ public class PlayerData
 
     public string Pack()
     {
-        return $"{Milk}|{Cookies}|{Position}|{Time}";
+        return $"{Milk}|{Cookies}|{Time}|{Position}";
     }
 
     public static PlayerData Unpack(string packed)
@@ -79,9 +80,10 @@ public class PlayerData
 
             return new PlayerData(unpack_milk, unpack_cookies, unpack_time, unpack_position);
         }
-        catch
+        catch (Exception ex)
         {
-            throw new ArgumentException("Input is invalid");
+            Debug.LogError(ex);
+            throw;
         }
     }
 
