@@ -62,6 +62,7 @@ public class LevelManager : Singleton<LevelManager>
         CameraManager spawnedCam = Instantiate(camManager, spawnedLevel.PlayerSpawnPoint);
 
         spawnedLevel.name = level.name;
+        spawnedLevel.transform.position = Vector3.zero;
 
         spawnedPlayer.transform.localPosition = playerData.Position;
         spawnedCam.transform.localPosition = k_camPos;
