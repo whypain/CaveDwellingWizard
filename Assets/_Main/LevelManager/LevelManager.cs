@@ -13,7 +13,7 @@ public class LevelManager : Singleton<LevelManager>
     private Player currentPlayer;
     private Level currentLevel;
 
-    private Vector3 k_camPos => new Vector3(0, -1, 0);
+    private Vector3 k_camPos => new Vector3(0, 1, 0);
 
 
     [ContextMenu("Test Load Level")]
@@ -55,7 +55,7 @@ public class LevelManager : Singleton<LevelManager>
         if (currentLevel != null) throw new System.Exception("There is already a level loaded");
         if (player == null || camManager == null) throw new System.Exception("Player or CamManager is null");
 
-        (Level level, PlayerData playerData) = await saveLoadSystem.Load();
+        (Level level, PlayerData playerData, int camNode) = await saveLoadSystem.Load();
 
         Level spawnedLevel = Instantiate(level, transform);
         Player spawnedPlayer = Instantiate(player, spawnedLevel.PlayerSpawnPoint);
@@ -68,7 +68,7 @@ public class LevelManager : Singleton<LevelManager>
         spawnedCam.transform.localPosition = k_camPos;
 
         spawnedPlayer.Initialize(playerData);
-        spawnedCam.Initialize(spawnedPlayer);
+        spawnedCam.Initialize(spawnedPlayer, camNode);
 
         currentLevel = spawnedLevel;
         currentPlayer = spawnedPlayer;

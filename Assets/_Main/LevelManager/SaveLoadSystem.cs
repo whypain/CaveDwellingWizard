@@ -18,10 +18,11 @@ public class SaveLoadSystem
     }
 
 
-    public async Task<(Level, PlayerData)> Load()
+    public async Task<(Level, PlayerData, int)> Load()
     {
         Level level;
         PlayerData playerData;
+        int camNode;
 
         if (PlayerPrefs.HasKey(Constants.PLAYER_DATA))
         {
@@ -33,6 +34,8 @@ public class SaveLoadSystem
 
             string raw = PlayerPrefs.GetString(Constants.PLAYER_DATA);
             playerData = PlayerData.Unpack(raw);
+
+            camNode = PlayerPrefs.GetInt("CameraNode", 0);
         }
         else
         {
@@ -40,9 +43,10 @@ public class SaveLoadSystem
             GameObject loaded = await operation.Task;
             level = loaded.GetComponent<Level>();
             playerData = new PlayerData();
+            camNode = 0;
         }
 
-        return (level, playerData);
+        return (level, playerData, camNode);
     }
 }
 
