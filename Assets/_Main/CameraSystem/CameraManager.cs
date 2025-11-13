@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Unity.Cinemachine;
@@ -19,8 +20,16 @@ public class CameraManager : MonoBehaviour
 
     private bool isOnCooldown;
     private float camDistance;
+    private int currentCamNode = 0;
 
     private Vector3 k_startingCamPos => new Vector3(0, 0, -10);
+
+    private void Awake()
+    {
+        if (camPrefab == null) throw new Exception("Cam Prefab can not be null.");
+
+        cam = Camera.main;
+    }
 
     public void Initialize(Player player, int camNode)
     {
@@ -28,20 +37,27 @@ public class CameraManager : MonoBehaviour
         if (player == null) throw new System.Exception("Player can not be null.");
 
         mainCam = Instantiate(camPrefab, transform);
-
-        mainCam.transform.localPosition = k_startingCamPos;
         cam = Camera.main;
-
+        
         // Sample point to the left to calculate camera distance
         Vector3 samplePos = cam.ViewportToWorldPoint(new Vector3(-0.5f, 0.5f, 0f));
-        camDistance = Vector2.Distance(samplePos, mainCam.transform.position);
+        Vector3 world_startingCamPos = k_startingCamPos + transform.position;
+        camDistance = Vector2.Distance(samplePos, world_startingCamPos);
 
         // Move the starting camera along the x-axis based on the saved camNode
-        mainCam.transform.position += camNode * camDistance * new Vector3(1, 0, 0);
+        currentCamNode = camNode;
+        mainCam.transform.localPosition = camDistance * camNode * new Vector3(1, 0, 0);
+        mainCam.transform.localPosition = mainCam.transform.localPosition.With(z: -10);
+
+        Debug.Log($"CameraManager initialized at camNode {camNode} at position {mainCam.transform.localPosition}");
+
+        mainCam.gameObject.SetActive(true);
     }
 
     void Update()
     {
+        if (player == null || cam == null) return;
+
         vs_lastPlayerPosition = cam.WorldToViewportPoint(player.transform.position);
 
         // For debugging purposes
@@ -62,11 +78,15 @@ public class CameraManager : MonoBehaviour
 
     private void OnPlayerExitLeft()
     {
+        if (isOnCooldown) return;
+
         MoveCamera(MoveDirection.Left);
     }
 
     private void OnPlayerExitRight()
     {
+        if (isOnCooldown) return;
+
         MoveCamera(MoveDirection.Right);
     }
 
@@ -92,6 +112,8 @@ public class CameraManager : MonoBehaviour
         Vector2 targetPos = mainCam.transform.localPosition + (Vector3)(dir * camDistance);
         float timeElapsed = 0f;
 
+        currentCamNode += (int)dir.x;
+
         while (Vector2.Distance(mainCam.transform.localPosition, targetPos) > 0.1f)
         {
             float newX = Mathf.Lerp(mainCam.transform.localPosition.x, targetPos.x, transitionCurve.Evaluate(timeElapsed/transitionDuration));
@@ -107,6 +129,21 @@ public class CameraManager : MonoBehaviour
         isOnCooldown = true;
         await Task.Delay((int)(switchCamCooldown * 1000));
         isOnCooldown = false;
+    }
+
+    public int GetCurrentCamNode()
+    {
+        return currentCamNode;
+    }
+    
+    private void OnDrawGizmosSelected()
+    {
+        if (mainCam != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x + camDistance), Vector2.one * 0.2f);
+            Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x - camDistance), Vector2.one * 0.2f);
+        }
     }
 }
 

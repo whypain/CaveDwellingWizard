@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (playerData == null) return;
         playerData.UpdatePosition(transform.localPosition);
     }
 }

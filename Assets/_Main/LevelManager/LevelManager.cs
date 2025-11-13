@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,10 +9,12 @@ public class LevelManager : Singleton<LevelManager>
 
     public Level CurrentLevel => currentLevel;
     public Player Player => currentPlayer;
+    public CameraManager CamManager => currentCam;
 
     private SaveLoadSystem saveLoadSystem = new SaveLoadSystem();
     private Player currentPlayer;
     private Level currentLevel;
+    private CameraManager currentCam;
 
     private Vector3 k_camPos => new Vector3(0, 1, 0);
 
@@ -27,7 +30,7 @@ public class LevelManager : Singleton<LevelManager>
     private void TestSaveLevel()
     {
         if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        saveLoadSystem.Save(CurrentLevel.name, Player.Data);
+        saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
     }
 
     [ContextMenu("Clear Save")]
@@ -37,10 +40,13 @@ public class LevelManager : Singleton<LevelManager>
     }
 
     [ContextMenu("Test Save & Exit")]
-    private void TestSaveAndExitLevel()
+    private async void TestSaveAndExitLevel()
     {
         if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        saveLoadSystem.Save(CurrentLevel.name, Player.Data);
+        saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
+
+        await Task.Delay(100); // Wait a frame to ensure save is complete
+
         OnExit();
     }
 
@@ -67,9 +73,12 @@ public class LevelManager : Singleton<LevelManager>
         spawnedPlayer.transform.localPosition = playerData.Position;
         spawnedCam.transform.localPosition = k_camPos;
 
+        await Task.Yield(); // Wait a frame to ensure all Start/Awake methods are called
+
         spawnedPlayer.Initialize(playerData);
         spawnedCam.Initialize(spawnedPlayer, camNode);
 
+        currentCam = spawnedCam;
         currentLevel = spawnedLevel;
         currentPlayer = spawnedPlayer;
     }

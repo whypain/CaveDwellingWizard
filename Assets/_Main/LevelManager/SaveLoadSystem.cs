@@ -11,10 +11,11 @@ public class SaveLoadSystem
         PlayerPrefs.DeleteKey(Constants.PLAYER_DATA);
     }
 
-    public void Save(string levelName, PlayerData playerData)
+    public void Save(string levelName, PlayerData playerData, int camNode)
     {
         PlayerPrefs.SetString(Constants.SAVED_LEVEL, levelName);
         PlayerPrefs.SetString(Constants.PLAYER_DATA, playerData.Pack());
+        PlayerPrefs.SetInt(Constants.CAMERA_NODE, camNode);
     }
 
 
@@ -52,7 +53,8 @@ public class SaveLoadSystem
 
 public static class Constants
 {
-    public static string SAVED_LEVEL = "SavedLevel";
-    public static string PLAYER_DATA = "PlayerData";
-    public static string FIRST_LEVEL = "Tutorial";
+    public static string SAVED_LEVEL => "SavedLevel";
+    public static string PLAYER_DATA => "PlayerData";
+    public static string FIRST_LEVEL => "Tutorial";
+    public static string CAMERA_NODE => "CameraNode";
 }
