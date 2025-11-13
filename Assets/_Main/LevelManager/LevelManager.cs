@@ -1,7 +1,5 @@
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class LevelManager : Singleton<LevelManager>
 {
@@ -28,12 +26,20 @@ public class LevelManager : Singleton<LevelManager>
     [ContextMenu("Test Save Level")]
     private void TestSaveLevel()
     {
+        if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
         saveLoadSystem.Save(CurrentLevel.name, Player.Data);
+    }
+
+    [ContextMenu("Clear Save")]
+    private void ClearSave()
+    {
+        saveLoadSystem.ClearSave();
     }
 
     [ContextMenu("Test Save & Exit")]
     private void TestSaveAndExitLevel()
     {
+        if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
         saveLoadSystem.Save(CurrentLevel.name, Player.Data);
         OnExit();
     }
@@ -42,12 +48,6 @@ public class LevelManager : Singleton<LevelManager>
     {
         Destroy(currentLevel.gameObject);
         currentLevel = null;
-    }
-
-    [ContextMenu("Clear Save")]
-    private void ClearSave()
-    {
-        saveLoadSystem.ClearSave();
     }
 
     public async void LoadLevel()
