@@ -12,13 +12,16 @@ public class LevelManager : Singleton<LevelManager>
     public Player Player => currentPlayer;
     public CameraManager CamManager => currentCam;
 
-    private SaveLoadSystem saveLoadSystem = new SaveLoadSystem();
     private Player currentPlayer;
     private Level currentLevel;
     private CameraManager currentCam;
 
     private Vector3 k_camPos => new Vector3(0, 1, 0);
 
+    private void Start()
+    {
+        LoadLevel();
+    }
 
     [ContextMenu("Test Load Level")]
     private void TestLoadLevel()
@@ -31,20 +34,20 @@ public class LevelManager : Singleton<LevelManager>
     private async void TestSaveLevel()
     {
         if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        await saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
+        await SaveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
     }
 
     [ContextMenu("Clear Save")]
     private void ClearSave()
     {
-        saveLoadSystem.ClearSave();
+        SaveLoadSystem.ClearSave();
     }
 
     [ContextMenu("Test Save & Exit")]
     private async void TestSaveAndExitLevel()
     {
         if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        await saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
+        await SaveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
 
         OnExit();
     }
@@ -63,7 +66,7 @@ public class LevelManager : Singleton<LevelManager>
         if (player == null || camManager == null) throw new System.Exception("Player or CamManager is null");
 
 
-        (Level level, PlayerData playerData, int camNode) = await saveLoadSystem.Load();
+        (Level level, PlayerData playerData, int camNode) = await SaveLoadSystem.Load();
 
         Level spawnedLevel = Instantiate(level, transform);
         Player spawnedPlayer = Instantiate(player, spawnedLevel.PlayerSpawnPoint);

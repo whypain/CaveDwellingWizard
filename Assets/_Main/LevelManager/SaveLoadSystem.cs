@@ -3,15 +3,15 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class SaveLoadSystem
+public static class SaveLoadSystem
 {
-    public void ClearSave()
+    public static void ClearSave()
     {
         PlayerPrefs.DeleteKey(Constants.SAVED_LEVEL);
         PlayerPrefs.DeleteKey(Constants.PLAYER_DATA);
     }
 
-    public async Task Save(string levelName, PlayerData playerData, int camNode)
+    public static async Task Save(string levelName, PlayerData playerData, int camNode)
     {
         PlayerPrefs.SetString(Constants.SAVED_LEVEL, levelName);
         PlayerPrefs.SetString(Constants.PLAYER_DATA, playerData.Pack());
@@ -21,7 +21,7 @@ public class SaveLoadSystem
     }
 
 
-    public async Task<(Level, PlayerData, int)> Load()
+    public static async Task<(Level, PlayerData, int)> Load()
     {
         Level level;
         PlayerData playerData;

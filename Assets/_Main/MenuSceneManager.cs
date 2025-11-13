@@ -1,23 +1,23 @@
-using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuSceneManager : Singleton<MenuSceneManager>
 {
     [SerializeField] GameObject menuPanel;
     [SerializeField] ParticleSystem menuParticleSystem;
+    [SerializeField] LevelUI ui;
 
-    public void SetMenuActive(bool isActive)
+    public void NewGame()
     {
-        menuPanel.SetActive(isActive);
-        if (isActive)
-        {
-            menuParticleSystem.Play();
-        }
-        // else
-        // {
-        //     menuParticleSystem.Stop();
-        //     menuParticleSystem.Clear();
-        // }
+        SaveLoadSystem.ClearSave();
+        Continue();
+    }
+
+    public void Continue()
+    {
+        ui.FadeOut(2, async () => {
+            await SceneManager.LoadSceneAsync("Game");
+        });
     }
 
 }
