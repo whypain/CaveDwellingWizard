@@ -11,11 +11,13 @@ public class SaveLoadSystem
         PlayerPrefs.DeleteKey(Constants.PLAYER_DATA);
     }
 
-    public void Save(string levelName, PlayerData playerData, int camNode)
+    public async Task Save(string levelName, PlayerData playerData, int camNode)
     {
         PlayerPrefs.SetString(Constants.SAVED_LEVEL, levelName);
         PlayerPrefs.SetString(Constants.PLAYER_DATA, playerData.Pack());
         PlayerPrefs.SetInt(Constants.CAMERA_NODE, camNode);
+        
+        await Task.Delay(100); // Wait a frame to ensure save is complete
     }
 
 

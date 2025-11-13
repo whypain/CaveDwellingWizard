@@ -6,6 +6,7 @@ public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] CameraManager camManager;
     [SerializeField] Player player;
+    [SerializeField] LevelUI ui;
 
     public Level CurrentLevel => currentLevel;
     public Player Player => currentPlayer;
@@ -27,10 +28,10 @@ public class LevelManager : Singleton<LevelManager>
     }
 
     [ContextMenu("Test Save Level")]
-    private void TestSaveLevel()
+    private async void TestSaveLevel()
     {
         if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
+        await saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
     }
 
     [ContextMenu("Clear Save")]
@@ -43,23 +44,24 @@ public class LevelManager : Singleton<LevelManager>
     private async void TestSaveAndExitLevel()
     {
         if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
-
-        await Task.Delay(100); // Wait a frame to ensure save is complete
+        await saveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
 
         OnExit();
     }
 
     private void OnExit()
     {
-        Destroy(currentLevel.gameObject);
-        currentLevel = null;
+        ui.FadeOut(onComplete: () => {
+            Destroy(currentLevel.gameObject);
+            currentLevel = null;
+        });
     }
 
     public async void LoadLevel()
     {
         if (currentLevel != null) throw new System.Exception("There is already a level loaded");
         if (player == null || camManager == null) throw new System.Exception("Player or CamManager is null");
+
 
         (Level level, PlayerData playerData, int camNode) = await saveLoadSystem.Load();
 
@@ -73,6 +75,7 @@ public class LevelManager : Singleton<LevelManager>
         spawnedPlayer.transform.localPosition = playerData.Position;
         spawnedCam.transform.localPosition = k_camPos;
 
+        ui.FadeIn(3);
         await Task.Yield(); // Wait a frame to ensure all Start/Awake methods are called
 
         spawnedPlayer.Initialize(playerData);
