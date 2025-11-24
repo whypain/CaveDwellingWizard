@@ -17527,6 +17527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Hazard
   interactionCollider: {fileID: 3490509570591940429}
+  interactCooldown: 0.5
 --- !u!1 &9213054762001239004
 GameObject:
   m_ObjectHideFlags: 0
@@ -17586,6 +17587,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3270845557913323438}
     m_Modifications:
+    - target: {fileID: 2389645090993427909, guid: ed02bdda15c0c804cb4333979a215a25, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.52054
+      objectReference: {fileID: 0}
     - target: {fileID: 3925135647221679352, guid: ed02bdda15c0c804cb4333979a215a25, type: 3}
       propertyPath: m_Name
       value: '[ CameraManager ]'
@@ -17648,6 +17653,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3270845557913323438}
     m_Modifications:
+    - target: {fileID: 1524912793255080507, guid: 4c7a112e9b97ad544b38d6f6eadccda6, type: 3}
+      propertyPath: dashSpeed
+      value: 800
+      objectReference: {fileID: 0}
     - target: {fileID: 4026695193426224128, guid: 4c7a112e9b97ad544b38d6f6eadccda6, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.6

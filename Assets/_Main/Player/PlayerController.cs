@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float falingGravity;
     [SerializeField] float fallingThreshold;
     [SerializeField] float speed;
+    [SerializeField] float dashSpeed;
+    [SerializeField] float dashDuration = 0.1f;
+    [SerializeField] float dashCooldown = 1f;
     [SerializeField] float minWalkingSpd = 0.1f;
     [SerializeField] float groundCheckDist = 0.1f;
     [SerializeField] LayerMask whatIsGround;
@@ -21,7 +25,16 @@ public class PlayerController : MonoBehaviour
     private bool hasMvmentInput;
     private bool isGrounded => CheckGrounded();
     private bool isGroundedLastFrame;
+    private bool dashing;
+    private bool canDash;
     private Vector2 mvmentInput;
+    private float currMvmentSpeed;
+
+    private void Start()
+    {
+        currMvmentSpeed = speed;
+        canDash = true;
+    }
 
     private void OnEnable()
     {
@@ -29,6 +42,7 @@ public class PlayerController : MonoBehaviour
         InputSystem.actions["Player/Move"].canceled += UnMove;
 
         InputSystem.actions["Player/Jump"].performed += OnJump;
+        InputSystem.actions["Player/Dash"].performed += OnDash;
     }
 
     private void OnDisable()
@@ -37,6 +51,7 @@ public class PlayerController : MonoBehaviour
         InputSystem.actions["Player/Move"].canceled -= UnMove;
 
         InputSystem.actions["Player/Jump"].performed -= OnJump;
+        InputSystem.actions["Player/Dash"].performed -= OnDash;
     }
 
     private void Update()
@@ -44,6 +59,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Walking", Mathf.Abs(rb.linearVelocityX) > minWalkingSpd);
 
         if (!isGroundedLastFrame && isGrounded) OnLanded();
+        if (dashing) rb.linearVelocityY = 0;
     }
 
     private void LateUpdate()
@@ -67,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        Vector2 velocity = mvmentInput * speed * Time.fixedDeltaTime;
+        Vector2 velocity = mvmentInput * currMvmentSpeed * Time.fixedDeltaTime;
         rb.linearVelocityX = velocity.x;
     }
 
@@ -90,6 +106,22 @@ public class PlayerController : MonoBehaviour
     {
         if (!isGrounded) return;
         rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+    }
+
+    private async void OnDash(InputAction.CallbackContext _)
+    {
+        if (dashing || !canDash) return;
+
+        dashing = true;
+        canDash = false;
+        currMvmentSpeed = dashSpeed;
+
+        await Task.Delay((int)(dashDuration * 1000));
+        currMvmentSpeed = speed;
+        dashing = false;
+
+        await Task.Delay((int)(dashCooldown * 1000));
+        canDash = true;
     }
 
     private void OnLanded()
