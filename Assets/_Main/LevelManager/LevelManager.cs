@@ -1,55 +1,23 @@
-using System.Threading.Tasks;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : Singleton<LevelManager>
 {
+    [Header("Levels")]
+    [SerializeField] List<Level> levels;
+
+    [Header("References")]
     [SerializeField] CameraManager camManager;
     [SerializeField] Player player;
     [SerializeField] LevelUI ui;
 
     public Level CurrentLevel => currentLevel;
-    public Player Player => currentPlayer;
-    public CameraManager CamManager => currentCam;
-
-    private Player currentPlayer;
     private Level currentLevel;
-    private CameraManager currentCam;
 
-    private Vector3 k_camPos => new Vector3(0, 1, 0);
 
     private void Start()
     {
-        LoadLevel();
-    }
-
-    [ContextMenu("Test Load Level")]
-    private void TestLoadLevel()
-    {
-        if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        LoadLevel();
-    }
-
-    [ContextMenu("Test Save Level")]
-    private async void TestSaveLevel()
-    {
-        if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        await SaveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
-    }
-
-    [ContextMenu("Clear Save")]
-    private void ClearSave()
-    {
-        SaveLoadSystem.ClearSave();
-    }
-
-    [ContextMenu("Test Save & Exit")]
-    private async void TestSaveAndExitLevel()
-    {
-        if (!EditorApplication.isPlaying) throw new System.Exception("Must be in play mode");
-        await SaveLoadSystem.Save(CurrentLevel.name, Player.Data, currentCam.GetCurrentCamNode());
-
-        OnExit();
+        LoadLevel(0);
     }
 
     private void OnExit()
@@ -60,32 +28,15 @@ public class LevelManager : Singleton<LevelManager>
         });
     }
 
-    public async void LoadLevel()
+    public void LoadLevel(int index)
     {
         if (currentLevel != null) throw new System.Exception("There is already a level loaded");
         if (player == null || camManager == null) throw new System.Exception("Player or CamManager is null");
 
-
-        (Level level, PlayerData playerData, int camNode) = await SaveLoadSystem.Load();
-
-        Level spawnedLevel = Instantiate(level, transform);
-        Player spawnedPlayer = Instantiate(player, spawnedLevel.PlayerSpawnPoint);
-        CameraManager spawnedCam = Instantiate(camManager, spawnedLevel.PlayerSpawnPoint);
-
-        spawnedLevel.name = level.name;
+        Level spawnedLevel = Instantiate(levels[index], transform);
+        spawnedLevel.name = levels[index].name;
         spawnedLevel.transform.position = Vector3.zero;
-
-        spawnedPlayer.transform.localPosition = playerData.Position;
-        spawnedCam.transform.localPosition = k_camPos;
-
-        ui.FadeIn(3);
-        await Task.Yield(); // Wait a frame to ensure all Start/Awake methods are called
-
-        spawnedPlayer.Initialize(playerData);
-        spawnedCam.Initialize(spawnedPlayer, camNode);
-
-        currentCam = spawnedCam;
         currentLevel = spawnedLevel;
-        currentPlayer = spawnedPlayer;
+        ui.FadeIn(3);
     }
 }

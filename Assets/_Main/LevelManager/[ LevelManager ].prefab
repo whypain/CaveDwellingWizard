@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a347d6ad120728c489022408d4119387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  levels:
+  - {fileID: 3718990805305976620, guid: bda7dae0b40ebf84db8858aa6b6a5c68, type: 3}
   camManager: {fileID: 7290686084408051908, guid: ed02bdda15c0c804cb4333979a215a25, type: 3}
   player: {fileID: 8654179934430694127, guid: 4c7a112e9b97ad544b38d6f6eadccda6, type: 3}
   ui: {fileID: 8808253044649636601}

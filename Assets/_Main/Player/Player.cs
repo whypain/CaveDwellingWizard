@@ -12,13 +12,6 @@ public class Player : MonoBehaviour
     {
         this.playerData = playerData;
     }
-
-
-    private void Update()
-    {
-        if (playerData == null) return;
-        playerData.UpdatePosition(transform.localPosition);
-    }
 }
 
 public class PlayerData

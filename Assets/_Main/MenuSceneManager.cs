@@ -7,13 +7,7 @@ public class MenuSceneManager : Singleton<MenuSceneManager>
     [SerializeField] ParticleSystem menuParticleSystem;
     [SerializeField] LevelUI ui;
 
-    public void NewGame()
-    {
-        SaveLoadSystem.ClearSave();
-        Continue();
-    }
-
-    public void Continue()
+    public void StartGame()
     {
         ui.FadeOut(2, async () => {
             await SceneManager.LoadSceneAsync("Game");
