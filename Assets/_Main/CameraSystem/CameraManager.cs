@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -144,18 +143,6 @@ public class CameraManager : MonoBehaviour
             Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x + camDistance), Vector2.one * 0.2f);
             Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x - camDistance), Vector2.one * 0.2f);
         }
-    }
-}
-
-public static class Vector3Extension
-{
-    public static Vector3 With(this Vector3 original, float? x = null, float? y = null, float? z = null)
-    {
-        return new Vector3(
-            x ?? original.x,
-            y ?? original.y,
-            z ?? original.z
-        );
     }
 }
 

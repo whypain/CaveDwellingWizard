@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Game
+  m_text: Start Game
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 581cb4a72c06ed34ab9c8b1635ea77bd, type: 2}
   m_sharedMaterial: {fileID: -7535372594021990554, guid: 581cb4a72c06ed34ab9c8b1635ea77bd, type: 2}
@@ -5672,7 +5672,7 @@ GameObject:
   - component: {fileID: 855181735}
   - component: {fileID: 855181734}
   m_Layer: 5
-  m_Name: New Game
+  m_Name: Start Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5744,7 +5744,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1601511681}
         m_TargetAssemblyTypeName: MenuSceneManager, Assembly-CSharp
-        m_MethodName: NewGame
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5941,7 +5941,7 @@ GameObject:
   - component: {fileID: 883323675}
   - component: {fileID: 883323674}
   m_Layer: 5
-  m_Name: Continue
+  m_Name: Credits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7077,7 +7077,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Continue
+  m_text: Credits
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 581cb4a72c06ed34ab9c8b1635ea77bd, type: 2}
   m_sharedMaterial: {fileID: -7535372594021990554, guid: 581cb4a72c06ed34ab9c8b1635ea77bd, type: 2}
