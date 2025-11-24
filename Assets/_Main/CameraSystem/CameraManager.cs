@@ -18,10 +18,8 @@ public class CameraManager : MonoBehaviour
     private Camera cam;
 
     private bool isOnCooldown;
+    private bool isInitialized;
     private float camDistance;
-    private int currentCamNode = 0;
-
-    private Vector3 k_startingCamPos => new Vector3(0, 0, -10);
 
     private void Awake()
     {
@@ -30,31 +28,30 @@ public class CameraManager : MonoBehaviour
         cam = Camera.main;
     }
 
-    public void Initialize(Player player, int camNode)
+    public void Initialize(Player player)
     {
         this.player = player;
         if (player == null) throw new System.Exception("Player can not be null.");
 
         mainCam = Instantiate(camPrefab, transform);
-        cam = Camera.main;
+        mainCam.transform.localPosition = new Vector3(0, 0, mainCam.transform.localPosition.z);
+        Debug.Log($"CameraManager initialized with position: {mainCam.transform.localPosition}");
         
         // Sample point to the left to calculate camera distance
-        Vector3 samplePos = cam.ViewportToWorldPoint(new Vector3(-0.5f, 0.5f, 0f));
-        Vector3 world_startingCamPos = k_startingCamPos + transform.position;
-        camDistance = Vector2.Distance(samplePos, world_startingCamPos);
-
-        // Move the starting camera along the x-axis based on the saved camNode
-        currentCamNode = camNode;
-        mainCam.transform.localPosition = camDistance * camNode * new Vector3(1, 0, 0);
-        mainCam.transform.localPosition = mainCam.transform.localPosition.With(z: -10);
-
-        Debug.Log($"CameraManager initialized at camNode {camNode} at position {mainCam.transform.localPosition}");
+        Vector3 samplePos = cam.ViewportToWorldPoint(new Vector3(0f, 0.5f, 0f));
+        samplePos.y = mainCam.transform.position.y;
+        samplePos.z = mainCam.transform.position.z;
+        camDistance = Vector2.Distance(mainCam.transform.position, samplePos) * 2;
 
         mainCam.gameObject.SetActive(true);
+        isInitialized = true;
+        Debug.Log($"CameraManager initialized with position: {mainCam.transform.localPosition}");
     }
 
     void Update()
     {
+        if (!isInitialized) return;
+
         if (player == null || cam == null) return;
 
         vs_lastPlayerPosition = cam.WorldToViewportPoint(player.transform.position);
@@ -89,18 +86,6 @@ public class CameraManager : MonoBehaviour
         MoveCamera(MoveDirection.Right);
     }
 
-    [ContextMenu("Test Move Camera Left")]
-    private void TestMoveCameraLeft()
-    {
-        MoveCamera(MoveDirection.Left);
-    }
-
-    [ContextMenu("Test Move Camera Right")]
-    private void TestMoveCameraRight()
-    {
-        MoveCamera(MoveDirection.Right);
-    }
-
 
     private async void MoveCamera(MoveDirection direction)
     {
@@ -110,8 +95,6 @@ public class CameraManager : MonoBehaviour
         Vector2 dir = direction == MoveDirection.Left ? Vector2.left : Vector2.right;
         Vector2 targetPos = mainCam.transform.localPosition + (Vector3)(dir * camDistance);
         float timeElapsed = 0f;
-
-        currentCamNode += (int)dir.x;
 
         while (Vector2.Distance(mainCam.transform.localPosition, targetPos) > 0.1f)
         {
@@ -129,11 +112,6 @@ public class CameraManager : MonoBehaviour
         await Task.Delay((int)(switchCamCooldown * 1000));
         isOnCooldown = false;
     }
-
-    public int GetCurrentCamNode()
-    {
-        return currentCamNode;
-    }
     
     private void OnDrawGizmosSelected()
     {
@@ -143,6 +121,18 @@ public class CameraManager : MonoBehaviour
             Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x + camDistance), Vector2.one * 0.2f);
             Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x - camDistance), Vector2.one * 0.2f);
         }
+    }
+
+    [ContextMenu("Test Move Camera Left")]
+    private void TestMoveCameraLeft()
+    {
+        MoveCamera(MoveDirection.Left);
+    }
+
+    [ContextMenu("Test Move Camera Right")]
+    private void TestMoveCameraRight()
+    {
+        MoveCamera(MoveDirection.Right);
     }
 }
 

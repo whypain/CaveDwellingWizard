@@ -24,7 +24,7 @@ public class LevelManager : Singleton<LevelManager>
         GetReferences();
 
         player.Initialize(new PlayerData());
-        camManager.Initialize(player, 0);
+        camManager.Initialize(player);
 
         ui.FadeIn();
     }
