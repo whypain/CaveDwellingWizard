@@ -231,6 +231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8272587717960400379}
   - component: {fileID: 6175779959515286860}
+  - component: {fileID: 3700650251475057325}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -311,6 +312,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3700650251475057325
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957821449834263191}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7cdb4366e59bde84abbe0739ae9fcda4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1258767869104806129
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,7 +645,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4026695193426224128}
   - component: {fileID: 2384469141847664908}
-  - component: {fileID: 3162016161195166954}
   - component: {fileID: 1524912793255080507}
   - component: {fileID: 8654179934430694127}
   - component: {fileID: 6428596035322448195}
@@ -678,28 +700,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!95 &3162016161195166954
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7088004585605462282}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7cdb4366e59bde84abbe0739ae9fcda4, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1524912793255080507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -716,6 +716,9 @@ MonoBehaviour:
   falingGravity: 8
   fallingThreshold: -0.1
   speed: 200
+  dashSpeed: 0
+  dashDuration: 0.1
+  dashCooldown: 1
   minWalkingSpd: 0.1
   groundCheckDist: 0.52
   whatIsGround:
@@ -723,7 +726,7 @@ MonoBehaviour:
     m_Bits: 64
   playerTransform: {fileID: 4026695193426224128}
   playerSprite: {fileID: 8272587717960400379}
-  animator: {fileID: 3162016161195166954}
+  animator: {fileID: 3700650251475057325}
   rb: {fileID: 2384469141847664908}
 --- !u!114 &8654179934430694127
 MonoBehaviour:
@@ -775,10 +778,10 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.7066667, y: 1.7066667}
+    newSize: {x: 5.12, y: 5.12}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0

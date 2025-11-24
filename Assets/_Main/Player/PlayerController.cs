@@ -115,10 +115,12 @@ public class PlayerController : MonoBehaviour
         dashing = true;
         canDash = false;
         currMvmentSpeed = dashSpeed;
+        animator.SetTrigger("Dash");
 
         await Task.Delay((int)(dashDuration * 1000));
         currMvmentSpeed = speed;
         dashing = false;
+        animator.ResetTrigger("Dash");
 
         await Task.Delay((int)(dashCooldown * 1000));
         canDash = true;
