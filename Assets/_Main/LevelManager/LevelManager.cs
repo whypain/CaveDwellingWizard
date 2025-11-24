@@ -4,6 +4,8 @@ using UnityEngine;
 public class LevelManager : Singleton<LevelManager>
 {
     public Level CurrentLevel => currentLevel;
+    public Player Player => player;
+    public CameraManager CamManager => camManager;
 
     [Header("Levels")]
     [SerializeField] List<Level> levels;
@@ -29,6 +31,12 @@ public class LevelManager : Singleton<LevelManager>
 
     private void OnDestroy()
     {
+        OnExit();
+    }
+
+    public void EndLevel()
+    {
+        player.OnCompleteLevel();
         OnExit();
     }
 

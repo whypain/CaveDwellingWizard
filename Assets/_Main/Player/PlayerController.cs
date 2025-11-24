@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] Transform playerTransform;
+    [SerializeField] Transform playerSprite;
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody2D rb;
 
@@ -75,8 +76,8 @@ public class PlayerController : MonoBehaviour
         mvmentInput = ctx.ReadValue<Vector2>();
         hasMvmentInput = true;
 
-        if (mvmentInput.x < 0) playerTransform.localScale = new Vector3(-1, 1, 1);
-        else playerTransform.localScale = Vector3.one;
+        if (mvmentInput.x < 0) playerSprite.localScale = new Vector3(-1, 1, 1);
+        else playerSprite.localScale = Vector3.one;
     }
 
     private void UnMove(InputAction.CallbackContext ctx)
