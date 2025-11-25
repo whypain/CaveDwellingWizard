@@ -42,6 +42,7 @@ public class CameraManager : MonoBehaviour
         samplePos.y = mainCam.transform.position.y;
         samplePos.z = mainCam.transform.position.z;
         camDistance = Vector2.Distance(mainCam.transform.position, samplePos) * 2;
+        PlayerPrefs.SetFloat("CamDistance", camDistance); // cache for debugging purposes
 
         mainCam.gameObject.SetActive(true);
         isInitialized = true;
@@ -113,13 +114,19 @@ public class CameraManager : MonoBehaviour
         isOnCooldown = false;
     }
     
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        if (mainCam != null)
+        Camera cam = Camera.main;
+        if (Camera.main != null)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x + camDistance), Vector2.one * 0.2f);
-            Gizmos.DrawWireCube(mainCam.transform.localPosition.With(x: mainCam.transform.localPosition.x - camDistance), Vector2.one * 0.2f);
+
+            float camDistance = PlayerPrefs.GetFloat("CamDistance", 12f);
+            for (int i = 0; i <= 10; i++)
+            {
+                Gizmos.DrawWireCube(transform.position + Vector3.left * camDistance * i, new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, 1));
+                Gizmos.DrawWireCube(transform.position + Vector3.right * camDistance * i, new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, 1));
+            }
         }
     }
 
