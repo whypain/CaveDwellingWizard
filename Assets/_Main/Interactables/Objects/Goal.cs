@@ -4,7 +4,7 @@ public class Goal : InteractiveArea
 {
     public override void InternalInteract(Player _)
     {
-        LevelManager.Instance.EndLevel();
+        LevelManager.Instance.CompleteLevel();
         Debug.Log("Goal reached!");
     }
 }

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &338642252713796204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4641983678304025790}
+  m_Layer: 0
+  m_Name: SpawnedSlimes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4641983678304025790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338642252713796204}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4026695193426224128}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &384084301933021852
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +42,7 @@ GameObject:
   - component: {fileID: 392886413732609454}
   - component: {fileID: 3943882704784380237}
   - component: {fileID: 4400587132254353967}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4081127968094971638}
   - component: {fileID: 8699272282464896148}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +187,7 @@ GameObject:
   - component: {fileID: 3769935173475514657}
   - component: {fileID: 7282037810727134009}
   - component: {fileID: 3257193805632261940}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +263,7 @@ GameObject:
   - component: {fileID: 8272587717960400379}
   - component: {fileID: 6175779959515286860}
   - component: {fileID: 3700650251475057325}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +375,7 @@ GameObject:
   m_Component:
   - component: {fileID: 62260970473044974}
   - component: {fileID: 8402673021484422738}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: E
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +427,7 @@ GameObject:
   - component: {fileID: 2821674105537240977}
   - component: {fileID: 8483604756270719306}
   - component: {fileID: 4417405764803353112}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -510,7 +541,7 @@ GameObject:
   - component: {fileID: 9042064765798899144}
   - component: {fileID: 7062677828350144604}
   - component: {fileID: 1360605766335865525}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -648,7 +679,7 @@ GameObject:
   - component: {fileID: 1524912793255080507}
   - component: {fileID: 8654179934430694127}
   - component: {fileID: 6428596035322448195}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: '[ Player ]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -671,6 +702,7 @@ Transform:
   - {fileID: 8272587717960400379}
   - {fileID: 4081127968094971638}
   - {fileID: 8388196723274872324}
+  - {fileID: 4641983678304025790}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2384469141847664908
@@ -742,6 +774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   interactableUI: {fileID: 4417405764803353112}
   slimeSpawnerPrefab: {fileID: 1699439062214918473, guid: 61840f90fe8cb2c418aae43b6b22776c, type: 3}
+  spawnedSlimeParent: {fileID: 4641983678304025790}
   slimeCount: 2
   shootForce: 10
 --- !u!61 &6428596035322448195

@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : Singleton<LevelManager>
 {
@@ -9,23 +13,52 @@ public class LevelManager : Singleton<LevelManager>
 
     [Header("Levels")]
     [SerializeField] List<Level> levels;
+    [SerializeField] string levelCompleteText = "Level Complete";
+    [SerializeField] string levelFailedText = "Level Failed";
 
     [Header("References")]
     [SerializeField] LevelUI ui;
     [SerializeField] CollectibleUIManager collectibleUIManager;
     [SerializeField] Timer levelTimer;
     [SerializeField] TimerUI levelTimerUI;
+    [SerializeField] GameOverUI gameOverUI;
 
     private CameraManager camManager;
     private Player player;
     private Level currentLevel;
+    private int currentLevelIndex;
     private float timeTaken;
 
 
     private void Start()
     {
         LoadLevel(0);
-        GetReferences();
+    }
+
+    public void LoadLevel(int index)
+    {
+        Debug.Log("Loading level index: " + index);
+
+        InputSystem.EnableDevice(Keyboard.current);
+        InputSystem.actions["Player/Attack"].Enable();
+
+        if (currentLevel != null) throw new System.Exception("There is already a level loaded");
+
+        Level spawnedLevel = Instantiate(levels[index], transform);
+        spawnedLevel.name = levels[index].name;
+        spawnedLevel.transform.position = Vector3.zero;
+        currentLevel = spawnedLevel;
+        currentLevelIndex = index;
+
+        InitializeSystems();
+
+        ui.FadeIn();
+    }
+
+    private void InitializeSystems()
+    {
+        player ??= FindFirstObjectByType<Player>(FindObjectsInactive.Include) ?? throw new System.Exception("Player not found in scene");
+        camManager ??= FindFirstObjectByType<CameraManager>(FindObjectsInactive.Include) ?? throw new System.Exception("CameraManager not found in scene");
 
         player.Initialize();
         levelTimer.Initialize();
@@ -33,44 +66,67 @@ public class LevelManager : Singleton<LevelManager>
         camManager.Initialize(player);
         collectibleUIManager.Initialize(player.CollectibleManager);
         levelTimerUI.Initialize(levelTimer);
-
-        ui.FadeIn();
     }
 
-    private void OnDestroy()
+    [ContextMenu("Complete Level")]
+    public void CompleteLevel()
     {
-        OnExit();
-    }
+        InputSystem.DisableDevice(Keyboard.current);
+        InputSystem.actions["Player/Attack"].Disable();
 
-    public void EndLevel()
-    {
         player.OnCompleteLevel();
         timeTaken = levelTimer.Stop();
-        OnExit();
+
+        gameOverUI.Initialize(player.CollectibleManager, levelCompleteText, timeTaken);
+        if (currentLevelIndex + 1 < levels.Count)
+            gameOverUI.InitNextLevelButton();
     }
 
-    private void OnExit()
+    [ContextMenu("Fail Level")]
+    public void FailLevel()
     {
-        ui.FadeOut(onComplete: () => {
-            Destroy(currentLevel.gameObject);
-            currentLevel = null;
-        });
+        InputSystem.DisableDevice(Keyboard.current);
+        InputSystem.actions["Player/Attack"].Disable();
+
+        // player.OnFailLevel();
+        timeTaken = levelTimer.Stop();
+
+        gameOverUI.Initialize(player.CollectibleManager, levelFailedText, timeTaken);
     }
 
-    public void LoadLevel(int index)
+    [ContextMenu("Exit Level")]
+    private async Task OnExit()
     {
-        if (currentLevel != null) throw new System.Exception("There is already a level loaded");
+        await ui.FadeOutAsync();
 
-        Level spawnedLevel = Instantiate(levels[index], transform);
-        spawnedLevel.name = levels[index].name;
-        spawnedLevel.transform.position = Vector3.zero;
-        currentLevel = spawnedLevel;
+        timeTaken = 0f;
+        gameOverUI.gameObject.SetActive(false);
+
+        player = null;
+        camManager = null;
+
+        Destroy(currentLevel.gameObject);
+        currentLevel = null;
     }
 
-    private void GetReferences()
+
+    public async void LoadNextLevel()
     {
-        player ??= FindFirstObjectByType<Player>(FindObjectsInactive.Include) ?? throw new System.Exception("Player not found in scene");
-        camManager ??= FindFirstObjectByType<CameraManager>(FindObjectsInactive.Include) ?? throw new System.Exception("CameraManager not found in scene");
-        ui ??= FindFirstObjectByType<LevelUI>(FindObjectsInactive.Include) ?? throw new System.Exception("LevelUI not found in scene");
+        int nextIndex = currentLevelIndex + 1;
+        if (nextIndex >= levels.Count) throw new Exception("No more levels available");
+        await OnExit();
+        LoadLevel(nextIndex);
+    }
+
+    public async void ReloadCurrentLevel()
+    {
+        await OnExit();
+        LoadLevel(currentLevelIndex);
+    }
+
+    public async void ReturnToTitle()
+    {
+        await OnExit();
+        SceneManager.LoadScene("Menu");
     }
 }

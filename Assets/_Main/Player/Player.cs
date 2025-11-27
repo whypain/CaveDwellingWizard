@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] InteractableUI interactableUI;
     [SerializeField] SlimeSpawner slimeSpawnerPrefab;
+    [SerializeField] Transform spawnedSlimeParent;
     [SerializeField] int slimeCount = 2;
     [SerializeField] float shootForce = 30f;
 
@@ -69,8 +70,11 @@ public class Player : MonoBehaviour
     {
         if (slimeLeft <= 0) return;
 
-        var bullet = Instantiate(slimeSpawnerPrefab, transform.position, Quaternion.identity);
+        SlimeSpawner bullet = Instantiate(slimeSpawnerPrefab, transform.position, Quaternion.identity);
         bullet.GetComponent<Rigidbody2D>().linearVelocity = controller.GetFacingSide() * shootForce;
+
+        // Bind to level object
+        bullet.transform.SetParent(transform.parent);
         slimeLeft--;
     }
 }

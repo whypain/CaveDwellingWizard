@@ -11,6 +11,11 @@ public class CollectibleUIManager : MonoBehaviour
 
     public void Initialize(CollectiblesManager manager)
     {
+        foreach (Transform child in uiContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
         collectiblesManager = manager;
         collectiblesManager.OnCollected += OnCollected;
         activeUIs.Clear();

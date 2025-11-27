@@ -7,12 +7,11 @@ public class SlimeSpawner : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.TryGetComponent<Player>(out _)) return;
-
         Vector3 collisionNormal = collision.contacts[0].normal;
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, collisionNormal);
-        // rotation.eulerAngles = rotation.eulerAngles.With(z: rotation.eulerAngles.z - 90f);
-        Instantiate(prefab, transform.position, rotation);
+        Slime slime = Instantiate(prefab, transform.position, rotation);
+        slime.transform.SetParent(transform.parent);
+
         Destroy(gameObject);
     }
 }
