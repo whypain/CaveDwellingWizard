@@ -46,6 +46,7 @@ public class LevelManager : Singleton<LevelManager>
 
         InputSystem.EnableDevice(Keyboard.current);
         InputSystem.actions["Player/Attack"].Enable();
+        InputSystem.actions["Player/Move"].Enable();    
 
         if (currentLevel != null) throw new System.Exception("There is already a level loaded");
         isLevelOver = false;
@@ -90,6 +91,8 @@ public class LevelManager : Singleton<LevelManager>
         gameOverUI.Initialize(player.CollectibleManager, levelCompleteText, timeTaken);
         if (currentLevelIndex + 1 < levels.Count)
             gameOverUI.InitNextLevelButton();
+
+        BGMManager.Instance.PlayLevelCompletedBGM();
     }
 
     [ContextMenu("Fail Level")]
@@ -105,6 +108,8 @@ public class LevelManager : Singleton<LevelManager>
         timeTaken = levelTimer.Stop();
 
         gameOverUI.Initialize(player.CollectibleManager, levelFailedText, timeTaken);
+
+        BGMManager.Instance.PlayLevelFailedBGM();
     }
 
     [ContextMenu("Exit Level")]
@@ -131,17 +136,28 @@ public class LevelManager : Singleton<LevelManager>
         if (nextIndex >= levels.Count) throw new Exception("No more levels available");
         await OnExit();
         LoadLevel(nextIndex);
+
+        BGMManager.Instance.PlayLevelBGM();
     }
 
     public async void ReloadCurrentLevel()
     {
         await OnExit();
         LoadLevel(currentLevelIndex);
+
+        BGMManager.Instance.PlayLevelBGM();
     }
 
     public async void ReturnToTitle()
     {
         await OnExit();
+        BGMManager.Instance.PlayTitleBGM();
+        await Task.Delay(1000);
         SceneManager.LoadScene("Menu");
+    }
+
+    public bool CanOpenSettings()
+    {
+        return !isLevelOver && !isTransitioning;
     }
 }

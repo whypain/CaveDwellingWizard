@@ -1,4 +1,5 @@
 using PrimeTween;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +19,11 @@ public class Player : MonoBehaviour
     [Header("Health")]
     [SerializeField] PlayerHealthVignette healthVignette;
     [SerializeField] Resource healthResource;
+
+    [Header("Audio")]
+    [SerializeField] AudioClip slimeShootClip;
+    [SerializeField] AudioClip playerHurtClip;
+    [SerializeField] AudioClip playerDeadClip;
 
     private CollectiblesManager collectiblesManager;
     private Interactable currentInteractable;
@@ -76,6 +82,7 @@ public class Player : MonoBehaviour
         Debug.Log("Took damage");
 
         animator.SetTrigger("Hurt");
+        SoundManager.Instance.PlaySFX(playerHurtClip);
     }
 
     public void OnCompleteLevel()
@@ -99,6 +106,8 @@ public class Player : MonoBehaviour
         // Bind to level object
         bullet.transform.SetParent(transform.parent);
         slimeLeft--;
+
+        SoundManager.Instance.PlaySFX(slimeShootClip);
     }
 
     void OnDead()
@@ -108,5 +117,6 @@ public class Player : MonoBehaviour
 
         animator.SetTrigger("Dead");
         LevelManager.Instance.FailLevel();
+        SoundManager.Instance.PlaySFX(playerDeadClip);
     }
 }
