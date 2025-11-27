@@ -83,8 +83,9 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        Vector2 velocity = mvmentInput * currMvmentSpeed * Time.fixedDeltaTime;
-        rb.linearVelocityX = velocity.x;
+        Vector2 force = mvmentInput * currMvmentSpeed * Time.fixedDeltaTime;
+        force.y = 0;
+        rb.AddForce(force);
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
@@ -138,8 +139,29 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Add force to the player's Rigidbody2D.
+    /// </summary>
+    /// <param name="force">force to apply</param>
+    /// <param name="mode">force mode</param>
+    public void AddForce(Vector2 force, ForceMode2D mode = ForceMode2D.Impulse)
+    {
+        rb.AddForce(force, mode);
+    }
+
+    /// <summary>
+    /// Get the facing direction of the player.
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetFacingSide()
+    {
+        return playerSprite.localScale.x > 0 ? Vector2.right : Vector2.left;
+    }
+
+
     private void OnDrawGizmosSelected()
     {
         Debug.DrawRay(playerTransform.position, Vector2.down * groundCheckDist, Color.beige);
     }
 }
+

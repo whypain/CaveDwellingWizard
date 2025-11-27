@@ -1,19 +1,18 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Collider2D))]
 public class SlimeSpawner : MonoBehaviour
 {
-    [SerializeField] Slime slimePrefab;
+    [SerializeField] Slime prefab;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.TryGetComponent<Player>(out _)) return;
+
         Vector3 collisionNormal = collision.contacts[0].normal;
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, collisionNormal);
-        Instantiate(slimePrefab, transform.position, rotation);
+        // rotation.eulerAngles = rotation.eulerAngles.With(z: rotation.eulerAngles.z - 90f);
+        Instantiate(prefab, transform.position, rotation);
+        Destroy(gameObject);
     }
-}
-
-public class Slime : MonoBehaviour
-{
-
 }
