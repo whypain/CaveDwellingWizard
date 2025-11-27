@@ -12,6 +12,7 @@ public class LevelManager : Singleton<LevelManager>
 
     [Header("References")]
     [SerializeField] LevelUI ui;
+    [SerializeField] CollectibleUIManager collectibleUIManager;
 
     private CameraManager camManager;
     private Player player;
@@ -23,8 +24,9 @@ public class LevelManager : Singleton<LevelManager>
         LoadLevel(0);
         GetReferences();
 
-        player.Initialize(new PlayerData());
+        player.Initialize();
         camManager.Initialize(player);
+        collectibleUIManager.Initialize(player.CollectibleManager);
 
         ui.FadeIn();
     }

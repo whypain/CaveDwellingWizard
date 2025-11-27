@@ -715,8 +715,8 @@ MonoBehaviour:
   jumpForce: 20
   falingGravity: 8
   fallingThreshold: -0.1
-  speed: 200
-  dashSpeed: 800
+  speed: 2500
+  dashSpeed: 8000
   dashDuration: 0.1
   dashCooldown: 1
   minWalkingSpd: 0.1
@@ -743,7 +743,7 @@ MonoBehaviour:
   interactableUI: {fileID: 4417405764803353112}
   slimeSpawnerPrefab: {fileID: 1699439062214918473, guid: 61840f90fe8cb2c418aae43b6b22776c, type: 3}
   slimeCount: 2
-  shootForce: 30
+  shootForce: 10
 --- !u!61 &6428596035322448195
 BoxCollider2D:
   m_ObjectHideFlags: 0

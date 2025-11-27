@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerController))]
 public class Player : MonoBehaviour
 {
-    public PlayerData Data => playerData;
+    public CollectiblesManager CollectibleManager => collectiblesManager;
     public InteractableUI InteractableUI => interactableUI;
     public PlayerController Controller => controller;
 
@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] int slimeCount = 2;
     [SerializeField] float shootForce = 30f;
 
-    private PlayerData playerData;
+    private CollectiblesManager collectiblesManager;
     private Interactable currentInteractable;
     private PlayerController controller;
     private int slimeLeft;
@@ -38,9 +38,9 @@ public class Player : MonoBehaviour
     }
 
 
-    public void Initialize(PlayerData playerData)
+    public void Initialize()
     {
-        this.playerData = playerData;
+        collectiblesManager = new CollectiblesManager();
         interactableUI.HideImmediate();
     }
 
@@ -72,30 +72,5 @@ public class Player : MonoBehaviour
         var bullet = Instantiate(slimeSpawnerPrefab, transform.position, Quaternion.identity);
         bullet.GetComponent<Rigidbody2D>().linearVelocity = controller.GetFacingSide() * shootForce;
         slimeLeft--;
-    }
-}
-
-public class PlayerData
-{
-    public int Milk => milk;
-    public int Time => time;
-    public int Cookies => cookies;
-    
-    private int milk;
-    private int cookies;
-    private int time;
-
-    public PlayerData(int milk, int cookies, int time, Vector2 position)
-    {
-        this.milk = milk;
-        this.cookies = cookies;
-        this.time = time;
-    }
-
-    public PlayerData()
-    {
-        milk = 0;
-        cookies = 0;
-        time = 0;
     }
 }
