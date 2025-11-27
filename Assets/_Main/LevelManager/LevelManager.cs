@@ -28,6 +28,7 @@ public class LevelManager : Singleton<LevelManager>
     private Level currentLevel;
     private int currentLevelIndex;
     private float timeTaken;
+    private bool isLevelOver;
 
 
     private void Start()
@@ -43,6 +44,7 @@ public class LevelManager : Singleton<LevelManager>
         InputSystem.actions["Player/Attack"].Enable();
 
         if (currentLevel != null) throw new System.Exception("There is already a level loaded");
+        isLevelOver = false;
 
         Level spawnedLevel = Instantiate(levels[index], transform);
         spawnedLevel.name = levels[index].name;
@@ -71,6 +73,9 @@ public class LevelManager : Singleton<LevelManager>
     [ContextMenu("Complete Level")]
     public void CompleteLevel()
     {
+        if (isLevelOver) return;
+        isLevelOver = true;
+
         InputSystem.DisableDevice(Keyboard.current);
         InputSystem.actions["Player/Attack"].Disable();
 
@@ -85,6 +90,9 @@ public class LevelManager : Singleton<LevelManager>
     [ContextMenu("Fail Level")]
     public void FailLevel()
     {
+        if (isLevelOver) return;
+        isLevelOver = true;
+
         InputSystem.DisableDevice(Keyboard.current);
         InputSystem.actions["Player/Attack"].Disable();
 

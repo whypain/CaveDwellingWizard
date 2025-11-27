@@ -3,6 +3,7 @@ using UnityEngine;
 public class Hazard : ColliderInteractable
 {
     [SerializeField] float interactCooldown = 0.5f;
+    [SerializeField] int damageAmount = 10;
     bool isOnCooldown = false;
     float coolDownTimer = 0f;
 
@@ -20,9 +21,10 @@ public class Hazard : ColliderInteractable
     {
         if (isOnCooldown) return;
 
-        Debug.Log("Player hit a hazard!");
+        player.TakeDamage(damageAmount);
         isOnCooldown = true;
         coolDownTimer = interactCooldown;
+
     }
 
     void Update()

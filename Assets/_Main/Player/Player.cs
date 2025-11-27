@@ -1,3 +1,4 @@
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,14 +11,19 @@ public class Player : MonoBehaviour
 
     [SerializeField] InteractableUI interactableUI;
     [SerializeField] SlimeSpawner slimeSpawnerPrefab;
-    [SerializeField] Transform spawnedSlimeParent;
     [SerializeField] int slimeCount = 2;
     [SerializeField] float shootForce = 30f;
+    [SerializeField] Animator animator;
+
+    [Header("Health")]
+    [SerializeField] PlayerHealthVignette healthVignette;
+    [SerializeField] Resource healthResource;
 
     private CollectiblesManager collectiblesManager;
     private Interactable currentInteractable;
     private PlayerController controller;
     private int slimeLeft;
+    private bool isDead;
 
     private void Awake()
     {
@@ -30,12 +36,16 @@ public class Player : MonoBehaviour
     {
         InputSystem.actions["Player/Interact"].performed += OnInteract;
         InputSystem.actions["Player/Attack"].performed += OnShoot;
+
+        healthResource.OnDepleted += OnDead;
     }
 
     void OnDisable()
     {
         InputSystem.actions["Player/Interact"].performed -= OnInteract;
         InputSystem.actions["Player/Attack"].performed -= OnShoot;
+
+        healthResource.OnDepleted += OnDead;
     }
 
 
@@ -43,6 +53,9 @@ public class Player : MonoBehaviour
     {
         collectiblesManager = new CollectiblesManager();
         interactableUI.HideImmediate();
+
+        healthResource.Initialize();
+        healthVignette.Initialize(healthResource);
     }
 
     public void SetInteractable(Interactable interactable)
@@ -53,6 +66,16 @@ public class Player : MonoBehaviour
     public void PickupSlime()
     {
         slimeLeft++;
+    }
+
+    public void TakeDamage(int amount)
+    {
+        if (isDead) return;
+
+        healthResource.Decrease(amount);
+        Debug.Log("Took damage");
+
+        animator.SetTrigger("Hurt");
     }
 
     public void OnCompleteLevel()
@@ -76,5 +99,14 @@ public class Player : MonoBehaviour
         // Bind to level object
         bullet.transform.SetParent(transform.parent);
         slimeLeft--;
+    }
+
+    void OnDead()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        animator.SetTrigger("Dead");
+        LevelManager.Instance.FailLevel();
     }
 }

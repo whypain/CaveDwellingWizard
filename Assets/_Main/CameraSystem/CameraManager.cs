@@ -10,12 +10,12 @@ public class CameraManager : MonoBehaviour
     [SerializeField] float switchCamCooldown = 1f;
     [SerializeField] AnimationCurve transitionCurve;
     [SerializeField] float transitionDuration;
+    [SerializeField] Camera cam;
 
     private Player player;
     private Vector3 vs_lastPlayerPosition; // Prefix vs_ means Viewport Space
 
     private CinemachineCamera mainCam;
-    private Camera cam;
 
     private bool isOnCooldown;
     private bool isInitialized;
@@ -24,13 +24,12 @@ public class CameraManager : MonoBehaviour
     private void Awake()
     {
         if (camPrefab == null) throw new Exception("Cam Prefab can not be null.");
-
-        cam = Camera.main;
     }
 
     public void Initialize(Player player)
     {
         this.player = player;
+
         if (player == null) throw new System.Exception("Player can not be null.");
 
         mainCam = Instantiate(camPrefab, transform);
