@@ -10,6 +10,8 @@ public class LevelManager : Singleton<LevelManager>
     public Level CurrentLevel => currentLevel;
     public Player Player => player;
     public CameraManager CamManager => camManager;
+    public bool IsLevelOver => isLevelOver;
+    public bool IsTransitioning => isTransitioning;
 
     [Header("Levels")]
     [SerializeField] List<Level> levels;
@@ -29,6 +31,7 @@ public class LevelManager : Singleton<LevelManager>
     private int currentLevelIndex;
     private float timeTaken;
     private bool isLevelOver;
+    private bool isTransitioning;
 
 
     private void Start()
@@ -36,8 +39,9 @@ public class LevelManager : Singleton<LevelManager>
         LoadLevel(0);
     }
 
-    public void LoadLevel(int index)
+    public async void LoadLevel(int index)
     {
+        isTransitioning = true;
         Debug.Log("Loading level index: " + index);
 
         InputSystem.EnableDevice(Keyboard.current);
@@ -54,7 +58,8 @@ public class LevelManager : Singleton<LevelManager>
 
         InitializeSystems();
 
-        ui.FadeIn();
+        await ui.FadeInAsync();
+        isTransitioning = false;
     }
 
     private void InitializeSystems()
@@ -105,7 +110,9 @@ public class LevelManager : Singleton<LevelManager>
     [ContextMenu("Exit Level")]
     private async Task OnExit()
     {
+        isTransitioning = true;
         await ui.FadeOutAsync();
+        isTransitioning = false;
 
         timeTaken = 0f;
         gameOverUI.gameObject.SetActive(false);

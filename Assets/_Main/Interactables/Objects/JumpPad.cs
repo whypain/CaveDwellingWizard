@@ -6,7 +6,6 @@ public class JumpPad : ColliderInteractable
 
     public override void InternalInteract(Player player)
     {
-        Debug.Log("JumpPad activated!");
         player.Controller.AddForce(transform.up * jumpForce);
     }
 

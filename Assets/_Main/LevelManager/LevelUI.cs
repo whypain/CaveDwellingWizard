@@ -20,6 +20,13 @@ public class LevelUI : MonoBehaviour
         Tween.Alpha(fadeImage, 0f, 1f, duration).OnComplete(() => onComplete?.Invoke());
     }
 
+
+    public async Task FadeInAsync(float duration = 1f)
+    {
+        fadeImage.raycastTarget = false;
+        await Tween.Alpha(fadeImage, 1f, 0f, duration);
+    }
+
     public async Task FadeOutAsync(float duration = 1f)
     {
         fadeImage.raycastTarget = true;
