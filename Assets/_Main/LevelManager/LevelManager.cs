@@ -13,10 +13,13 @@ public class LevelManager : Singleton<LevelManager>
     [Header("References")]
     [SerializeField] LevelUI ui;
     [SerializeField] CollectibleUIManager collectibleUIManager;
+    [SerializeField] Timer levelTimer;
+    [SerializeField] TimerUI levelTimerUI;
 
     private CameraManager camManager;
     private Player player;
     private Level currentLevel;
+    private float timeTaken;
 
 
     private void Start()
@@ -25,8 +28,11 @@ public class LevelManager : Singleton<LevelManager>
         GetReferences();
 
         player.Initialize();
+        levelTimer.Initialize();
+
         camManager.Initialize(player);
         collectibleUIManager.Initialize(player.CollectibleManager);
+        levelTimerUI.Initialize(levelTimer);
 
         ui.FadeIn();
     }
@@ -39,6 +45,7 @@ public class LevelManager : Singleton<LevelManager>
     public void EndLevel()
     {
         player.OnCompleteLevel();
+        timeTaken = levelTimer.Stop();
         OnExit();
     }
 
