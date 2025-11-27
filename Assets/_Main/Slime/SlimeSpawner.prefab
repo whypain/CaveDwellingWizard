@@ -169,3 +169,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlimeSpawner
   prefab: {fileID: 1518306812119613945, guid: a6486fe319a97df44bc41ce22d6d364e, type: 3}
+  spawnSound: {fileID: 8300000, guid: 7e9517de615fb6847b106f1a1b06834b, type: 3}

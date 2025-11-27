@@ -25,6 +25,10 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField] TimerUI levelTimerUI;
     [SerializeField] GameOverUI gameOverUI;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip levelCompleteClip;
+    [SerializeField] AudioClip levelFailedClip;
+
     private CameraManager camManager;
     private Player player;
     private Level currentLevel;
@@ -92,6 +96,7 @@ public class LevelManager : Singleton<LevelManager>
         if (currentLevelIndex + 1 < levels.Count)
             gameOverUI.InitNextLevelButton();
 
+        SoundManager.Instance.PlaySFX(levelCompleteClip, 0.2f);
         BGMManager.Instance.PlayLevelCompletedBGM();
     }
 
@@ -109,6 +114,7 @@ public class LevelManager : Singleton<LevelManager>
 
         gameOverUI.Initialize(player.CollectibleManager, levelFailedText, timeTaken);
 
+        SoundManager.Instance.PlaySFX(levelFailedClip, 0.2f);
         BGMManager.Instance.PlayLevelFailedBGM();
     }
 

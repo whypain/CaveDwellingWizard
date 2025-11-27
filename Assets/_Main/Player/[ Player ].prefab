@@ -814,6 +814,9 @@ MonoBehaviour:
   animator: {fileID: 3700650251475057325}
   healthVignette: {fileID: 8482729256507660130}
   healthResource: {fileID: 2614371768373702043}
+  slimeShootClip: {fileID: 8300000, guid: 514be9b934560a94abc23febd28d4b15, type: 3}
+  playerHurtClip: {fileID: 8300000, guid: cbbb0e6a1ab9cb24aa724ea9c108f475, type: 3}
+  playerDeadClip: {fileID: 8300000, guid: f6066d17ede06464ebc68f0d328396a1, type: 3}
 --- !u!61 &6428596035322448195
 BoxCollider2D:
   m_ObjectHideFlags: 0

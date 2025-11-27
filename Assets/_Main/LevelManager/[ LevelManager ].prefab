@@ -327,6 +327,8 @@ MonoBehaviour:
   levelTimer: {fileID: 65894764548469119}
   levelTimerUI: {fileID: 1420063035222842584}
   gameOverUI: {fileID: 6103022447184127524}
+  levelCompleteClip: {fileID: 8300000, guid: 50bf9bdd8d8304246aef6b0c65a88327, type: 3}
+  levelFailedClip: {fileID: 8300000, guid: 702d34d7fbbc7f144a8c5c1e30855b06, type: 3}
 --- !u!114 &65894764548469119
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -175,6 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JumpPad
   interactionCollider: {fileID: 1125087918526249039}
   jumpForce: 50
+  jumpPadClip: {fileID: 8300000, guid: ebc86626ff75fa74ba2a41749d2a57bf, type: 3}
 --- !u!1 &2293010919187573797
 GameObject:
   m_ObjectHideFlags: 0
