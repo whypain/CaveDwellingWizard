@@ -7,14 +7,14 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : Singleton<LevelManager>
 {
-    public Level CurrentLevel => currentLevel;
+    public GameObject CurrentLevel => currentLevel;
     public Player Player => player;
     public CameraManager CamManager => camManager;
     public bool IsLevelOver => isLevelOver;
     public bool IsTransitioning => isTransitioning;
 
     [Header("Levels")]
-    [SerializeField] List<Level> levels;
+    [SerializeField] List<GameObject> levels;
     [SerializeField] string levelCompleteText = "Level Complete";
     [SerializeField] string levelFailedText = "Level Failed";
 
@@ -31,7 +31,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private CameraManager camManager;
     private Player player;
-    private Level currentLevel;
+    private GameObject currentLevel;
     private int currentLevelIndex;
     private float timeTaken;
     private bool isLevelOver;
@@ -55,7 +55,7 @@ public class LevelManager : Singleton<LevelManager>
         if (currentLevel != null) throw new System.Exception("There is already a level loaded");
         isLevelOver = false;
 
-        Level spawnedLevel = Instantiate(levels[index], transform);
+        GameObject spawnedLevel = Instantiate(levels[index], transform);
         spawnedLevel.name = levels[index].name;
         spawnedLevel.transform.position = Vector3.zero;
         currentLevel = spawnedLevel;

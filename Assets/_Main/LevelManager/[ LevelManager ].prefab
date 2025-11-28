@@ -319,8 +319,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
   levels:
-  - {fileID: 3718990805305976620, guid: bda7dae0b40ebf84db8858aa6b6a5c68, type: 3}
-  - {fileID: 3718990805305976620, guid: 5e6ebe87d5df3e945a83af69e7fa669c, type: 3}
+  - {fileID: 5570547798738721192, guid: bda7dae0b40ebf84db8858aa6b6a5c68, type: 3}
+  - {fileID: 5570547798738721192, guid: 5e6ebe87d5df3e945a83af69e7fa669c, type: 3}
   levelCompleteText: Level Complete
   levelFailedText: Level Failed
   ui: {fileID: 8808253044649636601}
