@@ -41,11 +41,6 @@ public class GameOverUI : MonoBehaviour
             collectibleUI.Initialize(kvp.Key, kvp.Value);
         }
 
-        returnToTitle.onClick.RemoveAllListeners();
-        retryLevel.onClick.RemoveAllListeners();
-        returnToTitle.onClick.AddListener(OnReturnToTitle);
-        retryLevel.onClick.AddListener(OnRetry);
-
         nextLevel.gameObject.SetActive(false);
 
         Tween.Alpha(canvasGroup, 0f, 1f, fadeDuration);
@@ -56,16 +51,6 @@ public class GameOverUI : MonoBehaviour
         nextLevel.gameObject.SetActive(true);
         nextLevel.onClick.RemoveAllListeners();
         nextLevel.onClick.AddListener(OnNextLevel);
-    }
-
-    void OnRetry()
-    {
-        LevelManager.Instance.ReloadCurrentLevel();
-    }
-
-    void OnReturnToTitle()
-    {
-        LevelManager.Instance.ReturnToTitle();
     }
 
     void OnNextLevel()

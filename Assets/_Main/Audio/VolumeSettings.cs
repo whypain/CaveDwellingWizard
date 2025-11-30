@@ -52,15 +52,15 @@ public class VolumeSettings : MonoBehaviour
 
     private void LoadSettings()
     {
-        float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 0.001f);
+        float masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
         master.value = masterVolume;
         OnMasterVolumeChanged(masterVolume);
 
-        float bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 0.001f);
+        float bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 0.2f);
         bgm.value = bgmVolume;
         OnBGMVolumeChanged(bgmVolume);
 
-        float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.001f);
+        float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
         sfx.value = sfxVolume;
         OnSFXVolumeChanged(sfxVolume);
     }

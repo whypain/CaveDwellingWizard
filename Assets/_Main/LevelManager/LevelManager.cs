@@ -131,6 +131,8 @@ public class LevelManager : Singleton<LevelManager>
         player = null;
         camManager = null;
 
+        InputSystem.EnableDevice(Keyboard.current);
+
         Destroy(currentLevel.gameObject);
         currentLevel = null;
     }

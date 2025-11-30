@@ -11,6 +11,7 @@ public class Settings : MonoBehaviour
     private void Start()
     {
         settingsMenu.SetActive(false);
+        InputSystem.actions["Player/ToggleSettings"].Enable();  
     }
 
     private void OnEnable()
