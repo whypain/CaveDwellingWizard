@@ -36,7 +36,7 @@ public class SoundManager : Singleton<SoundManager>
         if (bgmSource.clip != null)
         {
             await Tween.AudioVolume(bgmSource, bgmSource.volume, 0f, duration / 2f);
-            await Task.Delay(1000);
+            await WebGLFriendly.Delay(1000);
         }
 
         bgmSource.clip = newClip;

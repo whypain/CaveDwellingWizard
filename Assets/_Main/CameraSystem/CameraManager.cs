@@ -109,7 +109,7 @@ public class CameraManager : MonoBehaviour
     private async void CountCooldown()
     {
         isOnCooldown = true;
-        await Task.Delay((int)(switchCamCooldown * 1000));
+        await WebGLFriendly.Delay((int)(switchCamCooldown * 1000));
         isOnCooldown = false;
     }
     

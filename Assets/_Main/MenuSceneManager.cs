@@ -13,13 +13,13 @@ public class MenuSceneManager : Singleton<MenuSceneManager>
         ui.FadeIn(2);
     }
 
-    public void StartGame()
+    public async void StartGame()
     {
-        ui.FadeOut(2, async () => {
-            BGMManager.Instance.PlayLevelBGM();
-            await Task.Delay(1000);
-            await SceneManager.LoadSceneAsync("Game");
-        });
+        await ui.FadeOutAsync(2);
+
+        BGMManager.Instance.PlayLevelBGM();
+        await WebGLFriendly.Delay(1000);
+        SceneManager.LoadScene("Game");
     }
 
 }

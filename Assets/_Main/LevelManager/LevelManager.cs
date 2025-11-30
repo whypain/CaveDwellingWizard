@@ -160,7 +160,7 @@ public class LevelManager : Singleton<LevelManager>
     {
         await OnExit();
         BGMManager.Instance.PlayTitleBGM();
-        await Task.Delay(1000);
+        await WebGLFriendly.Delay(1000);
         SceneManager.LoadScene("Menu");
     }
 
